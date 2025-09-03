@@ -3,6 +3,7 @@
     "name": "mood-tracker",
     "slug": "mood-tracker",
     "version": "1.0.0",
+    "entryPoint": "App.js",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "moodtracker",
