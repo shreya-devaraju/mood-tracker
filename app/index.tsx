@@ -21,6 +21,7 @@ const MOODS = [
     {value: 'neutrally_neutral', label: 'Neutral', emoji: '😑'},
     {value: 'super_sad', label: 'Super Sad', emoji: '😢'},
     {value: 'horribly_angry', label: 'Horribly Angry', emoji: '🤬'},
+    {value: 'confused', label: 'Confused', emoji:'🤔'}
 ];
 
 export default function App() {
