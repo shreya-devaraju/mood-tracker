@@ -8,6 +8,7 @@ import {
   orderBy,
   query,
   serverTimestamp,
+  Timestamp
 } from 'firebase/firestore';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -25,22 +26,25 @@ const MOODS = [
 ];
 
 export default function App() {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<ItemType[]>([]);
   const [sending, setSending] = useState(false);
   const moodsRef = collection(db, 'moods');
 
   //need to figure out what to do with data
   useEffect(() => {
     const q = query(moodsRef, orderBy('createdAt', 'desc'), limit(20));
-    const unsub = onSnapshot(q, (snap) => {
-      const data = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    const unsub = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() as Omit<ItemType, 'id'> }));
       setItems(data);
     }, (err) => console.error(err));
     return () => unsub();
   }, []);
 
+  //Timestamp -> what we recieve from Firestore
+  type ItemType = {id: string; mood: string; data: string, createdAt?: Timestamp | null};
+
   //need to figure out what to do with mood
-  const logMood = useCallback(async (mood) => {
+  const logMood = useCallback(async (mood: string) => {
     try {
       setSending(true);
       await addDoc(moodsRef, {
@@ -56,8 +60,8 @@ export default function App() {
   }, []);
 
 
-//need to figure out what to do with item
-  const renderItem = ({ item }) => {
+//--Fixed Item
+  const renderItem = ({ item }: {item: ItemType}) => {
     const ts = item.createdAt?.toDate ? item.createdAt.toDate() : null;
     const time = ts ? ts.toLocaleString() : '…';
     const moodMeta = MOODS.find(m => m.value === item.mood);
