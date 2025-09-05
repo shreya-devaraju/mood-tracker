@@ -1,0 +1,22 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDnVZGw23foNDna22fsb_OHvSS15dUAOW4",
+  authDomain: "mood-tracker-2583e.firebaseapp.com",
+  projectId: "mood-tracker-2583e",
+  storageBucket: "mood-tracker-2583e.firebasestorage.app",
+  messagingSenderId: "455265883510",
+  appId: "1:455265883510:web:7ede48d4d966a5977f9657"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+//need to make sure export is here so index can use it
+const db = getFirestore(app);
+export { db };
