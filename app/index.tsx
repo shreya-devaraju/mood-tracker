@@ -75,11 +75,19 @@ export default function App() {
     if (!user) return;
     try {
       setSending(true);
-      await addDoc(collection(db, 'moods'), {
-        mood,
-        uid: user.uid,
-        createdAt: serverTimestamp(),
-      });
+
+    const newEntry = {
+    id: Math.random().toString(), // temporary ID
+    mood,
+    createdAt: new Date(), // temp timestamp
+    };
+    setItems((prev) => [newEntry, ...prev]);
+
+    await addDoc(collection(db, 'moods'), {
+      mood,
+      uid: user.uid,
+      createdAt: serverTimestamp(),
+    });
     } catch (e) {
       console.error(e);
       Alert.alert('Error', 'Could not log mood.');
@@ -137,40 +145,41 @@ export default function App() {
 
   //When the user is not logged in this should show up instead:
   if (!user) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.title}>Mood Tracker</Text>
-        <TextInput 
-          style={styles.input} 
-          placeholder="Email" 
-          placeholderTextColor="#999" 
-          value={email} 
-          onChangeText={setEmail}
-        />
-        <TextInput 
-          style={styles.input} 
-          placeholder="Password" 
-          placeholderTextColor="#999" 
-          secureTextEntry 
-          value={password} 
-          onChangeText={setPassword} 
-        />
-        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Mood Tracker</Text>
+      <Text style={styles.subtitle}>Welcome! Create an account or sign-in.</Text>
+      <TextInput 
+        style={styles.input} 
+        placeholder="Email" 
+        placeholderTextColor="#999" 
+        value={email} 
+        onChangeText={setEmail}
+      />
+      <TextInput 
+        style={styles.input} 
+        placeholder="Password" 
+        placeholderTextColor="#999" 
+        secureTextEntry 
+        value={password} 
+        onChangeText={setPassword} 
+      />
+      <View style={styles.authButtonContainer}>
+        <TouchableOpacity style={styles.authButton} onPress={handleSignUp}>
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleSignIn}>
+        <TouchableOpacity style={styles.authButton} onPress={handleSignIn}>
           <Text style={styles.buttonText}>Sign In</Text>
         </TouchableOpacity>
-      </SafeAreaView>
-    );
-  }
-
-
-//When the user is signed in this will show up instead
+      </View>
+    </SafeAreaView>
+  );}
+  
+  
+  
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Welcome, {user.email}</Text>
-
       <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
         <Text style={styles.buttonText}>Sign Out</Text>
       </TouchableOpacity>
@@ -206,8 +215,9 @@ export default function App() {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: '#101114' },
   title: { fontSize: 28, fontWeight: '700', color: 'white', marginBottom: 12, textAlign: 'center'},
+  subtitle: {fontSize: 20, fontWeight: '500', color: 'white', marginBottom: 12, textAlign: 'center'},
   buttons: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 16, paddingLeft: 12, paddingRight: 5},
-  button: { backgroundColor: '#1f2937', paddingVertical: 10, paddingHorizontal: 12, borderRadius: 12 },
+  button: { backgroundColor: '#1f2937', paddingVertical: 10, paddingHorizontal: 12, borderRadius: 12, marginBottom: 12},
   signOutButton: { backgroundColor: '#b91c1c', paddingVertical: 10, paddingHorizontal: 12, borderRadius: 12, marginBottom: 16 },
   buttonText: { color: 'white', fontSize: 16 },
   section: { color: '#cbd5e1', fontWeight: '600', marginBottom: 8, marginTop: 10 },
@@ -216,6 +226,7 @@ const styles = StyleSheet.create({
   rowTitle: { color: 'white', fontSize: 16, fontWeight: '600' },
   rowSub: { color: '#94a3b8', fontSize: 12, marginTop: 2 },
   empty: { color: '#94a3b8', textAlign: 'center', marginTop: 32 },
-  input: {height: 48, borderColor: '#ccc', borderWidth: 1, borderRadius: 8, paddingHorizontal: 12, marginBottom: 16, backgroundColor: '#fff', fontSize: 16}
+  input: {height: 48, borderColor: '#ccc', borderWidth: 1, borderRadius: 8, paddingHorizontal: 12, marginBottom: 16, backgroundColor: '#fff', fontSize: 16, marginHorizontal: 50},
+  authButtonContainer: { alignItems: 'center', width: '100%', marginTop: 16},
+  authButton: { backgroundColor: '#1f2937', paddingVertical: 10, paddingHorizontal: 24, borderRadius: 12, marginBottom: 12, width: 200, alignItems: 'center'}
 });
-
