@@ -22,6 +22,6 @@ This is a mood tracking application created with Expo and React Native.
 3. Start the app
 
    ```bash
-   npx expo start --tunnel
+   npx expo start --tunnel or npx exo start
    ```
 No additional setup is required: the project has been connected to a shared Firebase project, so all you need to do is run the commands to automatically use the backend. Make sure you have the Expo Go App downloaded, and scan the QR code with your phone camera to view the application on your phone.
